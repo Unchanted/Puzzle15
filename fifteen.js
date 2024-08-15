@@ -3,9 +3,9 @@
 class Puzzle {
     constructor() {
         this.board = [
-            ['🐜', '🦬', '🐈', '🐕'], 
-            ['🐘', '🐟', '🐐', '🐓'], 
-            ['🦎', '🦊', '🦘', '🦁'], 
+            ['🐜', '🐃', '🐈', '🐕'],
+            ['🐘', '🐟', '🐐', '🐓'],
+            ['🦎', '🦊', '🦘', '🦁'],
             ['🐁', 'n', '🦦', ' ']
         ];
         this.blanki = 3;
@@ -13,8 +13,9 @@ class Puzzle {
     }
 
     slide(i, j) {
-        if ((Math.abs(i - this.blanki) + Math.abs(j - this.blankj)) == 1) {
-            [this.board[this.blanki][this.blankj], this.board[i][j]] = [this.board[i][j], this.board[this.blanki][this.blankj]];
+        if (Math.abs(i - this.blanki) + Math.abs(j - this.blankj) === 1) {
+            [this.board[this.blanki][this.blankj], this.board[i][j]] =
+            [this.board[i][j], this.board[this.blanki][this.blankj]];
             this.blanki = i;
             this.blankj = j;
             return true;
@@ -23,14 +24,19 @@ class Puzzle {
     }
 
     solved() {
-        const winningOrder = ['🐜', '🦬', '🐈', '🐕', '🐘', '🐟', '🐐', '🐓', '🦎', '🦊', '🦘', '🦁', '🐁', 'n', '🦦', ' '];
-        let reduceBoard = [].concat(...this.board);
-        return reduceBoard.every((_, i) => reduceBoard[i] === winningOrder[i]);
+        const correct = [
+            '🐜', '🐃', '🐈', '🐕',
+            '🐘', '🐟', '🐐', '🐓',
+            '🦎', '🦊', '🦘', '🦁',
+            '🐁', 'n', '🦦', ' '
+        ];
+        const flatBoard = this.board.flat();
+        return flatBoard.every((item, index) => item === correct[index]);
     }
 
     random_slide() {
-        let x = Math.floor(Math.random() * 4);
-        let y = Math.floor(Math.random() * 4);
+        const x = Math.floor(Math.random() * 4);
+        const y = Math.floor(Math.random() * 4);
         this.slide(x, y);
     }
 
@@ -41,42 +47,51 @@ class Puzzle {
     }
 }
 
-const fif = new Puzzle();
-let divs = [];
+const puzzle = new Puzzle();
+const divs = [];
 
 function clickSlide(e) {
-    let my_id = e.currentTarget.id;
-    let id = my_id.split('_');
-    let i = parseInt(id[1]);
-    let j = parseInt(id[2]);
+    const [_, i, j] = e.currentTarget.id.split('_');
+    puzzle.slide(parseInt(i), parseInt(j));
+    updateBoard();
 
-    fif.slide(i, j);
-    divs.forEach((row, i) => row.forEach((s, j) => s.textContent = (fif.board[i][j])));
-
-    if (fif.solved()) {
+    if (puzzle.solved()) {
         alert("You solved the puzzle!");
-        document.getElementById("about").classList.remove("hidden");
+        const aboutButton = document.createElement("button");
+        aboutButton.textContent = "About";
+        aboutButton.className = "button";
+        aboutButton.onclick = () => window.location.href = "https://github.com/Unchanted/Puzzle15";
+        document.body.appendChild(aboutButton);
     }
 }
 
 function clickRand() {
-    fif.randomize();
-    divs.forEach((row, i) => row.forEach((s, j) => s.textContent = (fif.board[i][j])));
+    puzzle.randomize();
+    updateBoard();
 }
 
-function clickHint() {
+function showHint() {
     alert("chronological order");
+}
+
+function updateBoard() {
+    divs.forEach((row, i) => row.forEach((div, j) => {
+        div.textContent = puzzle.board[i][j];
+    }));
 }
 
 for (let i = 0; i < 4; i++) {
     let row = [];
     for (let j = 0; j < 4; j++) {
-        row.push(document.getElementById('s_' + i + '_' + j));
+        const squareDiv = document.getElementById(`s_${i}_${j}`);
+        row.push(squareDiv);
     }
     divs.push(row);
 }
 
-divs.forEach(row => row.forEach(x => x.addEventListener("click", clickSlide)));
+divs.forEach(row => row.forEach(div => div.addEventListener("click", clickSlide)));
+
 document.getElementById("rando").addEventListener("click", clickRand);
-document.getElementById("hint").addEventListener("click", clickHint);
-document.getElementById("about").addEventListener("click", () => window.location.href = "https://github.com/Unchanted/Puzzle15");
+document.getElementById("hint").addEventListener("click", showHint);
+
+updateBoard();
