@@ -53,3 +53,15 @@ body, html {
     position: absolute;
     bottom: 1%;
 }
+
+.about-button {
+    border: thick solid black;
+    background-color: salmon;
+    margin: 2%;
+    padding: 1%;
+    border-radius: 13%;
+    font-family: 'Germania One', cursive;
+    font-size: 2vmin;
+    position: absolute;
+    bottom: 90%;
+}
