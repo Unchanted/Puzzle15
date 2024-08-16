@@ -1,46 +1,55 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Germania One', cursive;
-  background-color: #f0f0f0;
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; 
 }
 
 .container {
-  width: 90vmin;
-  height: 90vmin;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 5px;
-  border: thick solid black;
+    border: thick solid black;
+    width: 90vmin; 
+    height: 90vmin;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 5px;
 }
 
 .square {
-  border: thin solid navy;
-  color: darkslategrey;
-  border-radius: 12px;
-  background-color: lightblue;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 6vmin;
+    border: thin solid navy;
+    font-family: 'Germania One', cursive;
+    color: darkslategrey;
+    border-radius: 12px;
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4vmin;
 }
 
 .button {
-  border: thick solid black;
-  background-color: salmon;
-  margin-top: 20px;
-  padding: 10px 20px;
-  border-radius: 13%;
-  font-size: 18pt;
-  cursor: pointer;
+    border: thick solid black;
+    background-color: salmon;
+    margin: 2%;
+    padding: 1%;
+    border-radius: 13%;
+    font-family: 'Germania One', cursive;
+    font-size: 2vmin;
+    position: absolute;
+    bottom: 10%;
+}
+
+.hint-button {
+    border: thick solid black;
+    background-color: salmon;
+    margin: 2%;
+    padding: 1%;
+    border-radius: 13%;
+    font-family: 'Germania One', cursive;
+    font-size: 2vmin;
+    position: absolute;
+    bottom: 1%;
 }

@@ -1,97 +1,79 @@
-'use strict';
-
 class Puzzle {
     constructor() {
         this.board = [
-            ['🐜', '🐃', '🐈', '🐕'],
-            ['🐘', '🐟', '🐐', '🐓'],
-            ['🦎', '🦊', '🦘', '🦁'],
+            ['🐜', '🦬', '🐈', '🐕'], 
+            ['🐘', '🐟', '🐐', '🐓'], 
+            ['🦎', '🦊', '🦘', '🦁'], 
             ['🐁', 'n', '🦦', ' ']
         ];
         this.blanki = 3;
         this.blankj = 3;
     }
 
-    slide(i, j) {
-        if (Math.abs(i - this.blanki) + Math.abs(j - this.blankj) === 1) {
-            [this.board[this.blanki][this.blankj], this.board[i][j]] =
-            [this.board[i][j], this.board[this.blanki][this.blankj]];
+    slide(i,j){
+        if((Math.abs(i-this.blanki)+Math.abs(j-this.blankj))==1){
+            [this.board[this.blanki][this.blankj], this.board[i][j]] =  [this.board[i][j], this.board[this.blanki][this.blankj]];
             this.blanki = i;
             this.blankj = j;
+
             return true;
         }
         return false;
     }
 
-    solved() {
-        const correct = [
-            '🐜', '🐃', '🐈', '🐕',
-            '🐘', '🐟', '🐐', '🐓',
-            '🦎', '🦊', '🦘', '🦁',
-            '🐁', 'n', '🦦', ' '
-        ];
-        const flatBoard = this.board.flat();
-        return flatBoard.every((item, index) => item === correct[index]);
+    solved(){
+        let reduceBoard = [].concat(...this.board);
+        let correct = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,' '];
+
+        return reduceBoard.every((_,i) => reduceBoard[i] == correct[i]);
     }
 
-    random_slide() {
-        const x = Math.floor(Math.random() * 4);
-        const y = Math.floor(Math.random() * 4);
-        this.slide(x, y);
-    }
-
-    randomize() {
-        for (let k = 0; k < 500; k++) {
+    randomize(){
+        for(let k = 0; k < 500; k++){
             this.random_slide();
         }
     }
-}
 
-const puzzle = new Puzzle();
-const divs = [];
+    random_slide(){
+        let x = Math.floor(Math.random() * 4);
+        let y = Math.floor(Math.random() * 4);
 
-function clickSlide(e) {
-    const [_, i, j] = e.currentTarget.id.split('_');
-    puzzle.slide(parseInt(i), parseInt(j));
-    updateBoard();
-
-    if (puzzle.solved()) {
-        alert("You solved the puzzle!");
-        const aboutButton = document.createElement("button");
-        aboutButton.textContent = "About";
-        aboutButton.className = "button";
-        aboutButton.onclick = () => window.location.href = "https://github.com/Unchanted/Puzzle15";
-        document.body.appendChild(aboutButton);
+        this.slide(x,y);
     }
 }
 
-function clickRand() {
-    puzzle.randomize();
-    updateBoard();
+const fif = new Puzzle();
+let divs = [];
+
+function clickSlide(e){
+    let my_id = e.currentTarget.id;
+    let id = my_id.split('_');
+    let i = parseInt(id[1]);
+    let j = parseInt(id[2]);
+
+    fif.slide(i,j);
+
+    divs.forEach((row,i) => row.forEach((s,j) => s.textContent = (fif.board[i][j])));
+
+    if(fif.solved()){
+        alert("You solved the puzzle");
+    }
 }
 
-function showHint() {
-    alert("chronological order");
+function clickRand(e){
+    fif.randomize();
+    divs.forEach((row,i) => row.forEach((s,j) => s.textContent = (fif.board[i][j])));
 }
 
-function updateBoard() {
-    divs.forEach((row, i) => row.forEach((div, j) => {
-        div.textContent = puzzle.board[i][j];
-    }));
-}
-
-for (let i = 0; i < 4; i++) {
+for(let i = 0; i < 4; i++){
     let row = [];
-    for (let j = 0; j < 4; j++) {
-        const squareDiv = document.getElementById(`s_${i}_${j}`);
-        row.push(squareDiv);
+    for(let j = 0; j < 4; j++){
+        row.push(document.getElementById('s_'+i+'_'+j));
     }
     divs.push(row);
 }
 
-divs.forEach(row => row.forEach(div => div.addEventListener("click", clickSlide)));
+divs.forEach(row => row.forEach(x => x.addEventListener("click",clickSlide)));
 
-document.getElementById("rando").addEventListener("click", clickRand);
-document.getElementById("hint").addEventListener("click", showHint);
-
-updateBoard();
+let rando = document.getElementById("rando");
+rando.addEventListener("click", clickRand);
